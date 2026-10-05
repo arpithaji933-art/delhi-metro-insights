@@ -50,7 +50,7 @@ function Dashboard() {
       const ln = byId.get(r.station_id)?.line ?? "?";
       perLine.set(ln, (perLine.get(ln) ?? 0) + r.entries);
       const w = new Date(r.day + "T00:00:00").getDay();
-      dow[w].sum += r.entries; dow[w].n.add(r.day);
+      const slot = dow[w]!; slot.sum += r.entries; slot.n.add(r.day);
     }
     const days = perDay.size || 1;
     const trend = [...perDay.entries()].sort().map(([day, v]) => ({ day: day.slice(5), entries: v }));

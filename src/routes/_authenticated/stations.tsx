@@ -52,7 +52,7 @@ function StationsPage() {
 
   const remove = async (id: string) => {
     const { error } = await supabase.from("stations").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Station deleted");
     qc.invalidateQueries();
   };
@@ -135,7 +135,7 @@ function AddStation({ onDone }: { onDone: () => void }) {
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
     const { error } = await supabase.from("stations").insert(f);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Station added");
     setOpen(false); onDone();
   };
@@ -167,9 +167,9 @@ function AddRecord({ stations, onDone }: { stations: { id: string; name: string 
   const [f, setF] = useState({ station_id: "", day: new Date().toISOString().slice(0, 10), entries: 0, exits: 0 });
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!f.station_id) return toast.error("Pick a station");
+    if (!f.station_id) { toast.error("Pick a station"); return; }
     const { error } = await supabase.from("ridership_daily").upsert(f, { onConflict: "station_id,day" });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Passenger record saved");
     setOpen(false); onDone();
   };
