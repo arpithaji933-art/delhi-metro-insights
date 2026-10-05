@@ -14,16 +14,148 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
+      ridership_daily: {
+        Row: {
+          day: string
+          entries: number
+          exits: number
+          id: string
+          station_id: string
+        }
+        Insert: {
+          day: string
+          entries?: number
+          exits?: number
+          id?: string
+          station_id: string
+        }
+        Update: {
+          day?: string
+          entries?: number
+          exits?: number
+          id?: string
+          station_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ridership_daily_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ridership_hourly: {
+        Row: {
+          avg_entries: number
+          hour: number
+          id: string
+          station_id: string
+        }
+        Insert: {
+          avg_entries?: number
+          hour: number
+          id?: string
+          station_id: string
+        }
+        Update: {
+          avg_entries?: number
+          hour?: number
+          id?: string
+          station_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ridership_hourly_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stations: {
+        Row: {
+          created_at: string
+          id: string
+          is_interchange: boolean
+          line: string
+          name: string
+          opened_year: number
+          zone: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_interchange?: boolean
+          line: string
+          name: string
+          opened_year?: number
+          zone: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_interchange?: boolean
+          line?: string
+          name?: string
+          opened_year?: number
+          zone?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "viewer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +282,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "viewer"],
+    },
   },
 } as const
